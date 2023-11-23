@@ -1,13 +1,13 @@
-import Editor from "./components/Editor"
-import { Whiteboard } from "./components/Whiteboard"
+import Monaco from "./components/Monaco";
+// import { Whiteboard } from "./components/Whiteboard";
 
-function App() {
+
+function App() { 
 
   return (
-   
-    <Whiteboard/>
-    // <Editor />
+      //<Whiteboard/>
+      <Monaco/>
   )
 }
 
-export default App
+export default App;

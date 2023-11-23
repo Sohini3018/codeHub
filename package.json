@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.16.1",
-    "@monaco-editor/react": "^4.5.1",
+    "@monaco-editor/react": "^4.6.0",
     "@uiw/codemirror-extensions-langs": "^4.21.9",
     "@uiw/codemirror-theme-vscode": "^4.21.9",
     "@uiw/react-codemirror": "^4.21.9",
