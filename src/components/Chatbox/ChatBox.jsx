@@ -1,41 +1,40 @@
-import React, { useState } from 'react';
-import { sendMsgToOpenAI } from './openai'; 
+import React, { useState, useRef } from 'react';
+import { sendMsgToOpenAI } from './openai';
+import MessageTemplate from './MessageTemplate';
 
 const ChatBox = () => {
   const [userInput, setUserInput] = useState('');
   const [messages, setMessages] = useState([]);
+  const chatRef = useRef(null)
 
   const handleSend = async () => {
     setMessages((prevMessages) => [
       ...prevMessages,
       { text: userInput, sender: 'user' },
     ]);
-  
-    
+
+
     const responseFromGPT = await sendMsgToOpenAI(userInput);
-  
-    
+
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { text: responseFromGPT, sender: 'chatbot' },
     ]);
-  
-    
+
+    setTimeout(() => {
+      chatRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
     setUserInput('');
   };
-  
+
 
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-col justify-end p-10 rounded-lg w-full h-full">
-        <div className="flex-grow overflow-y-auto mb-4">
+        <div className="flex flex-col flex-grow overflow-y-auto mb-4 gap-4" ref={chatRef}>
           {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`p-2 rounded mb-2 ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {message.text}
-            </div>
+            message.sender === 'user' ? <MessageTemplate mode="user" text={message.text} /> : <MessageTemplate mode="bot" text={message.text} />
           ))}
         </div>
         <div className="flex">
