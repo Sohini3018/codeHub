@@ -1,12 +1,13 @@
 import Monaco from "./components/Monaco";
-// import { Whiteboard } from "./components/Whiteboard";
-
-
+import ChatBox from "./components/Chatbox/ChatBox"
+import Editor from "./components/Editor"
+import { Whiteboard } from "./components/Whiteboard"
 function App() { 
 
   return (
-      //<Whiteboard/>
-      <Monaco/>
+    // <Whiteboard/>
+    // <Editor />
+   <Monaco/>
   )
 }
 
