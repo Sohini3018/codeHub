@@ -1,14 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Monaco from "./components/CodeEditor/Monaco";
 import ChatBox from "./components/Chatbox/ChatBox"
-import Editor from "./components/CodeEditor/Editor"
 import { Whiteboard } from "./components/WhiteBoard/Whiteboard"
 import LandingPage from "./components/LandingPage/LandingPage";
+import TopNavbar from "./components/TopNavbar/TopNavbar";
+
 function App() {
 
   return (
     <BrowserRouter>
-    
+      <TopNavbar/>
+
       <Routes>
         
         <Route path="/" element = {<LandingPage />} />

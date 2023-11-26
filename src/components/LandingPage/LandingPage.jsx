@@ -1,29 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import image from "../../assets/landing_img.png";
 
 const LandingPage = () => {
   return (
     <div className="flex flex-col h-screen">
-      {/* Navbar */}
-      <nav className="bg-gray-800 p-4">
-        <div className="flex items-center justify-between">
-          <div className="text-white text-2xl font-bold">CodeHub</div>
-          <div className="flex space-x-10">
-            {/* Use Link from react-router-dom instead of a standard button */}
-            <Link to="/editor" className="text-white">
-              Open Editor
-            </Link>
-            <Link to="/chat" className="text-white">
-              Ask GPT 3.5
-            </Link>
-            <Link to="/whiteboard" className="text-white">
-              Start Collaboration
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Main Content */}
       <div className="flex items-center justify-center h-full bg-[#7e2727]">
         {/* Your middle content goes here */}
