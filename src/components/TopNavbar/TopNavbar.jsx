@@ -6,7 +6,7 @@ const TopNavbar = () => {
     <div>
         <nav className="bg-gray-800 p-4">
         <div className="flex items-center justify-between">
-          <div className="text-white text-2xl font-bold">CodeHub</div>
+          <Link to="/" className="text-white text-2xl font-bold">CodeHub</Link>
           <div className="flex space-x-10">
             {/* Use Link from react-router-dom instead of a standard button */}
             <Link to="/editor" className="text-white">
