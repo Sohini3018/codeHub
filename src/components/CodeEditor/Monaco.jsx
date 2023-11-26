@@ -59,8 +59,9 @@ const Monaco = () => {
   }
 
   return (
-    <div className="flex w-screen">
-      <div className="w-1/2 h-screen">
+    <div className="flex h-screen">
+      <div className="flex flex-col w-1/2">
+        <div>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 mx-5"
           disabled={fileName === "script.js"}
@@ -82,8 +83,8 @@ const Monaco = () => {
         >
           index.html
         </button>
+        </div>
         <Editor
-          height="90vh"
           theme="light"
           path={file.name}
           defaultLanguage={file.language}
@@ -95,7 +96,7 @@ const Monaco = () => {
       <iframe
         srcDoc={src}
         sandbox="allow-scripts allow-modals"
-        className="w-1/2 h-screen"
+        className="w-1/2"
       />
     </div>
   );

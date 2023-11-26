@@ -53,8 +53,6 @@ const ChatBox = () => {
             Send
           </button>
         </div>
-        {/* Ensure there is enough space for the input box to be visible */}
-        <div style={{ height: '50px' }}></div>
       </div>
     </div>
   );

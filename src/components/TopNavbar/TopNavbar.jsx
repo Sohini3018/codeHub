@@ -8,7 +8,6 @@ const TopNavbar = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="text-white text-2xl font-bold">CodeHub</Link>
           <div className="flex space-x-10">
-            {/* Use Link from react-router-dom instead of a standard button */}
             <Link to="/editor" className="text-white">
               Open Editor
             </Link>
@@ -22,7 +21,7 @@ const TopNavbar = () => {
         </div>
       </nav>
     </div>
-  )
-}
+  );
+};
 
-export default TopNavbar
+export default TopNavbar;
