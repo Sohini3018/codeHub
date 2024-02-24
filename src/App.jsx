@@ -4,6 +4,10 @@ import ChatBox from "./components/Chatbox/ChatBox";
 import { Whiteboard } from "./components/WhiteBoard/Whiteboard";
 import LandingPage from "./components/LandingPage/LandingPage";
 import TopNavbar from "./components/TopNavbar/TopNavbar";
+import Login from "./components/LoginSignup/Login";
+import Signup from "./components/LoginSignup/Signup";
+
+
 
 function App() {
   return (
@@ -12,10 +16,12 @@ function App() {
         <TopNavbar />
 
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage/>} />
           <Route path="/editor" element={<Monaco />} />
           <Route path="/chat" element={<ChatBox />} />
           <Route path="/whiteboard" element={<Whiteboard />} />
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/signup" element={<Signup/>}/>
         </Routes>
       </div>
     </BrowserRouter>

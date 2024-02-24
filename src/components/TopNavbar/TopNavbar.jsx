@@ -15,7 +15,13 @@ const TopNavbar = () => {
               Ask GPT 3.5
             </Link>
             <Link to="/whiteboard" className="text-white">
-              Start Collaboration
+              Whiteboard
+            </Link>
+            <Link to="/login" className="text-white">
+              Login
+            </Link>
+            <Link to="/signup" className="text-white">
+              Sign up
             </Link>
           </div>
         </div>
