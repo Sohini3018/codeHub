@@ -23,6 +23,9 @@ const TopNavbar = () => {
             <Link to="/signup" className="text-white">
               Sign up
             </Link>
+            <Link to="/room" className="text-white">
+              Room
+            </Link>
           </div>
         </div>
       </nav>
