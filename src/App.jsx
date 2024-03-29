@@ -6,7 +6,6 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import TopNavbar from "./components/TopNavbar/TopNavbar";
 import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
-import Room from "./components/Room/Room";
 
 
 
@@ -23,7 +22,6 @@ function App() {
           <Route path="/whiteboard" element={<Whiteboard />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/signup" element={<Signup/>}/>
-          <Route path="/room" element={<Room/>}/>
         </Routes>
       </div>
     </BrowserRouter>
