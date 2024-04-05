@@ -23,8 +23,15 @@ const register = async (req, res) => {
       userData.password = hashedPassword;
 
       const newUser = await User.create(userData);
+      const userFound = await User.findById(newUser._id).select("-password")
+      if (!userFound) {
+        return res.status(500).json({
+          statusCode: 500,
+          message: "Failed to create user"
+        })
+      }
       const token = await newUser.generateToken();
-      res.status(201).json({ message: "User created successfully", token });
+      res.status(201).json({ message: "User created successfully", data: userFound, token });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -47,7 +54,8 @@ const login = async (req, res) => {
 
       if (isValidPassword) {
         const token = await userExist.generateToken();
-        res.status(200).json({ message: "Login successful", token });
+        const userFound = await User.findById(userExist._id).select("-password")
+        res.status(200).json({ message: "Login successful", data: userFound, token });
       } else {
         res.status(401).json({ message: "Invalid Email or Password." });
       }
