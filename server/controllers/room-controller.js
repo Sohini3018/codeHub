@@ -37,7 +37,7 @@ const createRoom = async (req, res) => {
             success: false,
             data: {
                 statusCode: 500,
-                message: "Internal server error"
+                message: error || "Internal server error"
             }
         })
     }
@@ -106,7 +106,7 @@ const joinRoom = async (req, res) => {
             success: false,
             data: {
                 statusCode: 500,
-                message: "Internal server error"
+                message: error || "Internal server error"
             }
         })
     }
