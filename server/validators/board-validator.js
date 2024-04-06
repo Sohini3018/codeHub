@@ -1,4 +1,4 @@
-const { body } = require("express-validator")
+const { body, param } = require("express-validator")
 const { Types } = require("mongoose")
 
 const createBoardValidator = () => {
@@ -29,5 +29,15 @@ const updateBoardValidator = () => {
             .withMessage('please provide a valid boardId'),
     ]
 }
+const getBoardContentValidator = () => {
+    return [
+        param("boardId")
+            .exists()
+            .withMessage("please provide boardId field")
+            .trim()
+            .custom((value) => Types.ObjectId.isValid(value))
+            .withMessage('please provide a valid boardId'),
+    ]
+}
 
-module.exports = { createBoardValidator, updateBoardValidator }
+module.exports = { createBoardValidator, updateBoardValidator, getBoardContentValidator }

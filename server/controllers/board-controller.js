@@ -93,5 +93,35 @@ const updateBoard = async (req, res) => {
     }
 }
 
+const getBoardContent = async (req, res) => {
+    const { boardId } = req.params
+    try {
+        const boardFound = await Board.findById(boardId)
+        if (!boardFound) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "Board content not found"
+                }
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: boardFound
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 500,
+                message: error || "Internal server error"
+            }
+        })
+    }
+}
 
-module.exports = { createBoard, updateBoard }
+module.exports = { createBoard, updateBoard, getBoardContent }
