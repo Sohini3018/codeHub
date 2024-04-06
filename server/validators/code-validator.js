@@ -1,4 +1,5 @@
-const { body } = require("express-validator")
+const { body, param } = require("express-validator")
+const { Types } = require("mongoose")
 
 const createCodeValidator = () => {
     return [
@@ -17,4 +18,15 @@ const createCodeValidator = () => {
     ]
 }
 
-module.exports = { createCodeValidator }
+const getCodeValidator = () => {
+    return [
+        param("roomId")
+            .exists()
+            .withMessage("please provide roomId field")
+            .trim()
+            .custom((value) => Types.ObjectId.isValid(value))
+            .withMessage('please provide a valid roomId'),
+    ]
+}
+
+module.exports = { createCodeValidator, getCodeValidator }

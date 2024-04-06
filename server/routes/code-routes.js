@@ -1,11 +1,12 @@
 const express = require("express")
-const { createCode, updateCode } = require("../controllers/code-controller.js")
-const { createCodeValidator } = require("../validators/code-validator.js")
+const { createCode, updateCode, getCode } = require("../controllers/code-controller.js")
+const { createCodeValidator, getCodeValidator } = require("../validators/code-validator.js")
 const { validation } = require("../middleware/validator-middleware.js")
 
 const router = express.Router()
 
 router.route("/create").post(createCodeValidator(), validation, createCode)
 router.route("/update").post(createCodeValidator(), validation, updateCode)
+router.route("/getCode/:roomId").get(getCodeValidator(), validation, getCode)
 
 module.exports = router

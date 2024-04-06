@@ -95,4 +95,39 @@ const updateCode = async (req, res) => {
 
 }
 
-module.exports = { createCode, updateCode }
+const getCode = async (req, res) => {
+    const { roomId } = req.params
+    try {
+        // find the code with the roomId
+        const code = await Code.findOne({ roomId })
+        // not found reply with error
+        if (!code) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "Code does not exist for the provided roomId"
+                }
+
+            })
+        }
+        // found return the value
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: code
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 500,
+                message: error || "Internal server error"
+            }
+        })
+    }
+}
+
+module.exports = { createCode, updateCode, getCode }
