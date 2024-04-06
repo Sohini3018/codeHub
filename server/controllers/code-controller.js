@@ -53,4 +53,46 @@ const createCode = async (req, res) => {
     }
 }
 
-module.exports = { createCode }
+const updateCode = async (req, res) => {
+    const { html, css, js, codeId } = req.body
+    if (!Types.ObjectId.isValid(codeId)) {
+        return res.status(400).json({
+            success: false,
+            data: {
+                statusCode: 400,
+                message: "please provide correct codeId"
+            }
+        })
+    }
+    try {
+        const codeFound = await Code.findById(codeId)
+        if (!codeFound) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "Code with this codeId does not exists"
+                }
+            })
+        }
+        const updatedCode = await Code.findByIdAndUpdate(codeId, { html, css, js }, { new: true })
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: updatedCode
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: true,
+            data: {
+                statusCode: 500,
+                message: error || "Internal server error"
+            }
+        })
+    }
+
+}
+
+module.exports = { createCode, updateCode }
