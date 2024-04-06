@@ -25,10 +25,11 @@ const RoomSchema = new Schema({
 }, { timestamps: true })
 
 RoomSchema.pre("save", async function (next) {
-    if (this.isModified("password")) {
+    if (!this.isModified("password")) {
         return next()
     }
-    return await bcrypt.hash(this.password, 10)
+    this.password = await bcrypt.hash(this.password, 10)
+    next();
 })
 
 RoomSchema.methods.isPasswordCorrect = async function (password) {

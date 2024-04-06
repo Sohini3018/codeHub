@@ -43,4 +43,75 @@ const createRoom = async (req, res) => {
     }
 }
 
-module.exports = { createRoom }
+const joinRoom = async (req, res) => {
+    const { name, password, username } = req.body
+    try {
+        const roomFound = await Room.findOne({ name })
+        if (!roomFound) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "Room does not exist with the provided name"
+                }
+            })
+        }
+        const isPasswordCorrect = await roomFound.isPasswordCorrect(password)
+        if (!isPasswordCorrect) {
+            return res.status(401).json({
+                success: false,
+                data: {
+                    statusCode: 401,
+                    message: "Please enter correct credentials"
+                }
+            })
+        }
+        const userGotInRoom = await Room.findOne({
+            name,
+            users: {
+                $elemMatch: {
+                    $eq: username
+                }
+            }
+        })
+        if (userGotInRoom) {
+            return res.status(400).json({
+                success: false,
+                data: {
+                    statusCode: 400,
+                    message: "user has already joined the room"
+                }
+            })
+        }
+        const roomUpdated = await Room.updateOne({ name }, { $push: { users: username } })
+        if (!roomUpdated) {
+            return res.status(500).json({
+                success: false,
+                data: {
+                    statusCode: 500,
+                    message: "Failed to join user"
+                }
+            })
+        }
+        const roomSend = await Room.findOne({ name }).select("-password")
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: roomSend
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 500,
+                message: "Internal server error"
+            }
+        })
+    }
+}
+
+
+
+module.exports = { createRoom, joinRoom }

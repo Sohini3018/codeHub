@@ -31,5 +31,25 @@ const createRoomValidator = () => {
             .withMessage("admin name must be at least 3 characters long"),
     ]
 }
+const joineRoomValidator = () => {
+    return [
+        body("name")
+            .trim()
+            .notEmpty()
+            .withMessage("Please enter the room name")
+            .isLowercase()
+            .withMessage("Room name must be lowercase")
+            .isLength({ min: 3 })
+            .withMessage("Room name must be at least 3 characters long"),
+        body("password")
+            .trim()
+            .notEmpty()
+            .withMessage("Please enter your password"),
+        body("username")
+            .trim()
+            .notEmpty()
+            .withMessage("Please enter username")
+    ]
+}
 
-module.exports = { createRoomValidator }
+module.exports = { createRoomValidator, joineRoomValidator }
