@@ -6,7 +6,7 @@ const { validation } = require("../middleware/validator-middleware.js")
 const router = express.Router()
 
 router.route("/create").post(createCodeValidator(), validation, createCode)
-router.route("/update").post(createCodeValidator(), validation, updateCode)
+router.route("/update").patch(createCodeValidator(), validation, updateCode)
 router.route("/getCode/:roomId").get(getCodeValidator(), validation, getCode)
 
 module.exports = router

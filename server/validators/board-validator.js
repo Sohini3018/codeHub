@@ -15,5 +15,19 @@ const createBoardValidator = () => {
             .withMessage('please provide a valid roomId'),
     ]
 }
+const updateBoardValidator = () => {
+    return [
+        body("content")
+            .exists()
+            .withMessage("please provide content field")
+            .trim(),
+        body("boardId")
+            .exists()
+            .withMessage("please provide boardId field")
+            .trim()
+            .custom((value) => Types.ObjectId.isValid(value))
+            .withMessage('please provide a valid boardId'),
+    ]
+}
 
-module.exports = { createBoardValidator }
+module.exports = { createBoardValidator, updateBoardValidator }

@@ -47,4 +47,51 @@ const createBoard = async (req, res) => {
     }
 }
 
-module.exports = { createBoard }
+const updateBoard = async (req, res) => {
+    const { content, boardId } = req.body
+    try {
+        // check whether board exists
+        const boardFound = await Board.findById(boardId)
+        // exists then return error
+        if (!boardFound) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "Board does not exists"
+                }
+            })
+        }
+        // create the board
+        const boardUpdated = await Board.findByIdAndUpdate(boardId, { content }, { new: true })
+        if (!boardUpdated) {
+            return res.status(500).json({
+                success: false,
+                data: {
+                    statusCode: 500,
+                    message: "Failed to update the board"
+                }
+            })
+        }
+        // return the board
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                data: boardUpdated
+            }
+        })
+    } catch (error) {
+        // catch and return error
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 500,
+                message: error || "Internal server error"
+            }
+        })
+    }
+}
+
+
+module.exports = { createBoard, updateBoard }
