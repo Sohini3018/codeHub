@@ -33,6 +33,36 @@ const createChat = async (req, res) => {
     }
 }
 
+const getChats = async (req, res) => {
+    const { roomId } = req.params
+    console.log(roomId)
+    try {
+        const chats = await Chat.find({ roomId })
+        if (chats.length === 0) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 404,
+                    message: "chats not found"
+                }
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: chats
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 500,
+                message: error || "Internal server error"
+            }
+        })
+    }
+}
 
-
-module.exports = { createChat }
+module.exports = { createChat, getChats }
