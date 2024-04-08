@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require("cors")
 const app = express();
 const router = require("./routes/auth-router");
 const roomRouter = require("./routes/room-routes")
@@ -8,6 +8,7 @@ const boardRouter = require('./routes/board-routes.js')
 const chatRouter = require("./routes/chat-routes.js")
 
 app.use(express.json());
+app.use(cors())
 
 // middleware for the routes -- all routes present in routes folder
 app.use("/api/auth", router);
