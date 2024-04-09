@@ -6,6 +6,7 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import TopNavbar from "./components/TopNavbar/TopNavbar";
 import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
       <div className="flex flex-col h-screen">
         <TopNavbar />
+        <Toaster/>
 
         <Routes>
           <Route path="/" element={<LandingPage/>} />
