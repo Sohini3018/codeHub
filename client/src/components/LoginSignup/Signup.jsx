@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
@@ -13,6 +13,7 @@ const Signup = () => {
     password: "",
     confPassword: "",
   });
+  const navigate = useNavigate()
 
   function changeHandler(event) {
     const { name, value } = event.target;
@@ -40,6 +41,7 @@ const Signup = () => {
       });
       if (response.ok) {
         console.log("Form submitted successfully");
+        navigate("/roomJoin")
         toast.success("Account Created");
         setFormData({
           username: "",
