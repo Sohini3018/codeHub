@@ -112,6 +112,51 @@ const joinRoom = async (req, res) => {
     }
 }
 
+const getRoomsWithUser = async (req, res) => {
+    const { username } = req.query
+    if (!username) {
+        return res.status(400).json({
+            success: false,
+            data: {
+                statusCode: 400,
+                message: "please provode username"
+            }
+        })
+    }
+    try {
+        const roomsFound = await Room.find({
+            users: {
+                $elemMatch: {
+                    $eq: username
+                }
+            }
+        }).select("-password")
+        console.log(roomsFound)
+        if (roomsFound.length === 0) {
+            return res.status(404).json({
+                success: false,
+                data: {
+                    statusCode: 400,
+                    message: "no rooms found"
+                }
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            data: {
+                statusCode: 200,
+                value: roomsFound
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            data: {
+                statusCode: 200,
+                message: error.message || "Internal server error"
+            }
+        })
+    }
+}
 
-
-module.exports = { createRoom, joinRoom }
+module.exports = { createRoom, joinRoom, getRoomsWithUser }
