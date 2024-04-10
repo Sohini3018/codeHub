@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.route("/create").post(createBoardValidator(), validation, createBoard)
 router.route("/update").patch(updateBoardValidator(), validation, updateBoard)
-router.route("/get/:boardId").get(getBoardContentValidator(), validation, getBoardContent)
+router.route("/get/:roomId").get(getBoardContentValidator(), validation, getBoardContent)
 
 module.exports = router

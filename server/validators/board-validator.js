@@ -31,12 +31,12 @@ const updateBoardValidator = () => {
 }
 const getBoardContentValidator = () => {
     return [
-        param("boardId")
+        param("roomId")
             .exists()
             .withMessage("please provide boardId field")
             .trim()
             .custom((value) => Types.ObjectId.isValid(value))
-            .withMessage('please provide a valid boardId'),
+            .withMessage('please provide a valid roomId'),
     ]
 }
 

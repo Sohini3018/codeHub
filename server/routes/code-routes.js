@@ -7,6 +7,6 @@ const router = express.Router()
 
 router.route("/create").post(createCodeValidator(), validation, createCode)
 router.route("/update").patch(createCodeValidator(), validation, updateCode)
-router.route("/getCode/:roomId").get(getCodeValidator(), validation, getCode)
+router.route("/get/:roomId").get(getCodeValidator(), validation, getCode)
 
 module.exports = router

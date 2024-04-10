@@ -94,9 +94,9 @@ const updateBoard = async (req, res) => {
 }
 
 const getBoardContent = async (req, res) => {
-    const { boardId } = req.params
+    const { roomId } = req.params
     try {
-        const boardFound = await Board.findById(boardId)
+        const boardFound = await Board.findOne({ roomId })
         if (!boardFound) {
             return res.status(404).json({
                 success: false,
