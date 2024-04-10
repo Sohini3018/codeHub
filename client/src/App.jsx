@@ -8,6 +8,8 @@ import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
 import Room from "./components/Room/Room";
 import { Toaster } from 'react-hot-toast';
+import PublicRoute from "./components/PublicRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 
 
@@ -19,13 +21,15 @@ function App() {
         <Toaster />
 
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/editor" element={<Monaco />} />
-          <Route path="/chat" element={<ChatBox />} />
-          <Route path="/whiteboard" element={<Whiteboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/roomjoin" element={<Room />} />
+          <Route path="/" element={<PrivateRoute><LandingPage /></PrivateRoute>} />
+          <Route path="/editor" element={<PrivateRoute><Monaco /></PrivateRoute>} />
+          <Route path="/chat" element={<PrivateRoute><ChatBox /></PrivateRoute>} />
+          <Route path="/whiteboard" element={<PrivateRoute><Whiteboard /></PrivateRoute>} />
+          <Route path="/roomjoin" element={<PrivateRoute><Room /></PrivateRoute>} />
+
+          {/* public routes */}
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
         </Routes>
       </div>
     </BrowserRouter>
