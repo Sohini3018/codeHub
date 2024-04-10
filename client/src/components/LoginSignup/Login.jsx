@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { useUserContext } from "../../context/user/UserContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +13,8 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate()
+  const { setItem } = useLocalStorage()
+  const { setUserData } = useUserContext()
 
   function changeHandler(event) {
     const { name, value } = event.target;
@@ -34,6 +38,10 @@ const Login = () => {
       });
       if (response.ok) {
         console.log("Form submitted successfully");
+        const data = await response.json()
+        setItem("user", data.data)
+        setUserData(data.data)
+        console.log(data.data)
         navigate("/roomJoin")
         toast.success("Logged in");
         setFormData({ email: "", password: "" });

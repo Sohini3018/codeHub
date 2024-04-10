@@ -1,5 +1,3 @@
-import { User } from "../types/userType"
-
 const useLocalStorage = () => {
 
     const setItem = (key, value) => {
