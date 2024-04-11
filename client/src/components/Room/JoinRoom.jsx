@@ -148,6 +148,7 @@ const JoinRoom = () => {
   }
 
   useEffect(() => {
+    setRoomData(null)
     fetchRooms()
   }, [])
 
