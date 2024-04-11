@@ -10,6 +10,9 @@ function RoomContextProvider({ children }) {
     })
     const [boardData, setBoardData] = useState(null)
     const [chatsData, setChatsData] = useState(null)
+    const [roomData, setRoomData] = useState(null)
+    const [boardId, setBoardId] = useState(null)
+    const [codeId, setCodeId] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +46,7 @@ function RoomContextProvider({ children }) {
     }, []);
 
     return (
-        <RoomContext.Provider value={{ editorData, boardData, chatsData, setEditorData, setBoardData, setChatsData }}>
+        <RoomContext.Provider value={{ editorData, boardData, chatsData, setEditorData, setBoardData, setChatsData, roomData, setRoomData, setBoardId, setCodeId }}>
             {children}
         </RoomContext.Provider>
     )

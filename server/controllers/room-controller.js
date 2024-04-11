@@ -136,7 +136,7 @@ const getRoomsWithUser = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 data: {
-                    statusCode: 400,
+                    statusCode: 404,
                     message: "no rooms found"
                 }
             })
