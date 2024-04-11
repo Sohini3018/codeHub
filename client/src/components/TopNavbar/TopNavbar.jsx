@@ -1,9 +1,12 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../context/user/UserContext"
+import { useRoomContext } from '../../context/room/RoomContext';
 
 const TopNavbar = () => {
   const { userData } = useUserContext()
+  const { roomData, setMode } = useRoomContext()
+
   return (
     <div>
       <nav className="bg-gray-800 p-4">
@@ -11,26 +14,28 @@ const TopNavbar = () => {
           <Link to="/" className="text-white text-2xl font-bold">CodeHub</Link>
           <div className="flex space-x-10">
             {
-              userData ? (
+              userData && roomData && (
                 <div className='flex space-x-10'>
-                  <Link to="/editor" className="text-white">
+                  <p to="/editor" className="text-white cursor-pointer" onClick={() => setMode("editor")}>
                     Open Editor
-                  </Link>
-                  <Link to="/chat" className="text-white">
+                  </p>
+                  <p to="/chat" className="text-white cursor-pointer" onClick={() => setMode("chat")}>
                     Ask GPT 3.5
-                  </Link>
-                  <Link to="/whiteboard" className="text-white">
+                  </p>
+                  <p to="/whiteboard" className="text-white cursor-pointer" onClick={() => setMode("board")}>
                     Whiteboard
-                  </Link>
+                  </p>
                 </div>
-              ) : <div className='flex space-x-10'>
-                <Link to="/login" className="text-white">
-                  Login
-                </Link>
-                <Link to="/signup" className="text-white">
-                  Sign up
-                </Link>
-              </div>
+              )
+            }
+            {userData && !roomData && (<div className='flex space-x-10'>
+              <Link to="/login" className="text-white">
+                Login
+              </Link>
+              <Link to="/signup" className="text-white">
+                Sign up
+              </Link>
+            </div>)
             }
 
 

@@ -9,6 +9,7 @@ function UserContextProvider({ children }) {
 
     useEffect(() => {
         const userInfo = getItem("user")
+        console.log("user", userInfo)
         setUserData(userInfo)
     }, [])
 

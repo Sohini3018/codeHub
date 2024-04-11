@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom"
 
 function PrivateRoute({ children }) {
     const { userData } = useUserContext()
-    if (!userData) return <Navigate to="/login" replace />
+    if (!userData) return <Navigate to="/" replace />
     return children
 }
 

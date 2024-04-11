@@ -10,7 +10,7 @@ const Monaco = () => {
     css: "/* Write CSS code here... */",
     html: "<!-- Write HTML code here... -->",
   })
-  const { setEditorData, editorData } = useRoomContext()
+  const { setEditorData, editorData, roomData } = useRoomContext()
 
   let src = ` <!DOCTYPE html>
   <html lang="en">
