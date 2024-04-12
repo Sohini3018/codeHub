@@ -66,21 +66,21 @@ const Monaco = () => {
       <div className="flex flex-col w-1/2">
         <div>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 mx-5"
+            className={`${fileName === "script.js" ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"}  text-white font-bold py-2 px-4 rounded my-3 mx-5`}
             disabled={fileName === "script.js"}
             onClick={() => setFileName("script.js")}
           >
             script.js
           </button>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 mx-5"
+            className={`${fileName === "style.css" ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded my-3 mx-5`}
             disabled={fileName === "style.css"}
             onClick={() => setFileName("style.css")}
           >
             style.css
           </button>
           <button
-            className="index-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3 mx-5"
+            className={`index-button ${fileName === "index.html" ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded my-3 mx-5`}
             disabled={fileName === "index.html"}
             onClick={() => setFileName("index.html")}
           >
@@ -96,11 +96,13 @@ const Monaco = () => {
           onChange={handleChange}
         />
       </div>
-      <iframe
-        srcDoc={src}
-        sandbox="allow-scripts allow-modals"
-        className="w-1/2"
-      />
+      <div className="w-1/2 mt-4">
+        <h1 className="text-4xl font-semibold text-blue-500">Output</h1>
+        <iframe
+          srcDoc={src}
+          sandbox="allow-scripts allow-modals"
+        />
+      </div>
     </div>
   );
 };

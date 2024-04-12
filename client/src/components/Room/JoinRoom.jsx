@@ -185,9 +185,14 @@ const JoinRoom = () => {
           >
             Create Room
           </button>
+          <div class="relative flex items-center">
+            <div class="flex-grow border-t border-gray-400"></div>
+            <span class="flex-shrink mx-4 text-gray-400">OR</span>
+            <div class="flex-grow border-t border-gray-400"></div>
+          </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white mt-4 rounded-full p-4"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4"
             onClick={(e) => handleCreateOrJoin(e, "join")}
           >
             Join Room
