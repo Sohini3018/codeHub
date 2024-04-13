@@ -7,6 +7,23 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const chatRef = useRef(null)
 
+  async function getResponse(userInput) {
+    try {
+      const response = await fetch("https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_HUGGING_FACE_ACCESS_TOKEN}`
+        },
+        method: "POST",
+        body: JSON.stringify(userInput),
+      })
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   const handleSend = async () => {
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -14,12 +31,13 @@ const ChatBox = () => {
     ]);
 
 
-    const responseFromGPT = await sendMsgToOpenAI(userInput);
-
+    // const responseFromGPT = await sendMsgToOpenAI(userInput);
+    const responseFromModel = await getResponse({ inputs: userInput })
+    console.log(responseFromModel)
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { text: responseFromGPT, sender: 'chatbot' },
+      { text: responseFromModel[0].generated_text, sender: 'chatbot' },
     ]);
 
     setTimeout(() => {
