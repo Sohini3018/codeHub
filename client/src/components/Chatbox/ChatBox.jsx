@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { sendMsgToOpenAI } from './openai';
 import MessageTemplate from './MessageTemplate';
+import { useParams } from "react-router-dom"
+import { useRoomContext } from "../../context/room/RoomContext.js"
 
 const ChatBox = () => {
   const [userInput, setUserInput] = useState('');
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const chatRef = useRef(null)
+  const { roomId } = useParams()
+  const { chatsData: messages, setChatsData: setMessages } = useRoomContext()
 
   async function getResponse(userInput) {
     try {
@@ -24,12 +28,35 @@ const ChatBox = () => {
     }
   }
 
+  const saveMessages = async (senderType, content) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/chat/create", {
+        method: "POST",
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content,
+          senderType,
+          roomId
+        })
+      })
+      const data = await response.json()
+      if (!data.success) {
+        console.log(data.data.message)
+      }
+    } catch (error) {
+      console.log("ERROR IN SAVE MESSAGES FUNCTION", error.message)
+    }
+  }
+
   const handleSend = async () => {
     setMessages((prevMessages) => [
       ...prevMessages,
-      { text: userInput, sender: 'user' },
+      { content: userInput, senderType: 'USER' },
     ]);
-
+    saveMessages("USER", userInput)
 
     // const responseFromGPT = await sendMsgToOpenAI(userInput);
     const responseFromModel = await getResponse({ inputs: userInput })
@@ -37,8 +64,9 @@ const ChatBox = () => {
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { text: responseFromModel[0].generated_text, sender: 'chatbot' },
+      { content: responseFromModel[0].generated_text, senderType: 'BOT' },
     ]);
+    saveMessages("BOT", responseFromModel[0].generated_text)
 
     setTimeout(() => {
       chatRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
@@ -51,8 +79,8 @@ const ChatBox = () => {
     <div className="flex flex-col h-screen">
       <div className="flex flex-col justify-end p-10 rounded-lg w-full h-full">
         <div className="flex flex-col flex-grow overflow-y-auto mb-4 gap-4" ref={chatRef}>
-          {messages.map((message, index) => (
-            message.sender === 'user' ? <MessageTemplate mode="user" text={message.text} /> : <MessageTemplate mode="bot" text={message.text} />
+          {messages && messages.map((message, index) => (
+            message.senderType === 'USER' ? <MessageTemplate mode="user" text={message.content} /> : <MessageTemplate mode="bot" text={message.content} />
           ))}
         </div>
         <div className="flex">

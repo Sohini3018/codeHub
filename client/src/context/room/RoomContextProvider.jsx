@@ -13,7 +13,7 @@ function RoomContextProvider({ children }) {
         _id: "",
         content: ""
     })
-    const [chatsData, setChatsData] = useState(null)
+    const [chatsData, setChatsData] = useState([])
     const [roomData, setRoomData] = useState(null)
     const [mode, setMode] = useState("editor")
 

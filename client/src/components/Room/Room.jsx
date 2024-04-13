@@ -29,7 +29,12 @@ function Room() {
                 setEditorData({ html, css, js, _id })
             }
             if (boardReceived.data.statusCode === 200) {
-                let content = JSON.parse(boardReceived.data.value.content)
+                console.log(boardReceived.data.value)
+                let data = boardReceived.data.value.content
+                let content
+                if (data) {
+                    content = JSON.parse(data)
+                }
                 let _id = boardReceived.data.value._id
                 setBoardData({ content, _id })
             }
