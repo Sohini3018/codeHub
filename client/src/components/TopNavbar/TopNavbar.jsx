@@ -1,11 +1,21 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/user/UserContext"
 import { useRoomContext } from '../../context/room/RoomContext';
+import { IoExit } from "react-icons/io5";
+import useLocalStorage from "../../hooks/useLocalStorage.js"
 
 const TopNavbar = () => {
-  const { userData } = useUserContext()
+  const { userData, setUserData } = useUserContext()
   const { roomData, setMode } = useRoomContext()
+  const navigate = useNavigate()
+  const { deleteItem } = useLocalStorage()
+
+  const handleLogout = () => {
+    deleteItem("user")
+    setUserData(null)
+    navigate("/")
+  }
 
   return (
     <div>
@@ -16,6 +26,10 @@ const TopNavbar = () => {
             {
               userData && roomData && (
                 <div className='flex space-x-10'>
+                  <div className='flex gap-2 items-center cursor-pointer' onClick={() => navigate("/roomJoin")}>
+                    <IoExit className='text-3xl text-gray-300' />
+                    <p className='text-gray-300 '>Leave</p>
+                  </div>
                   <p to="/editor" className="text-white cursor-pointer" onClick={() => setMode("editor")}>
                     Open Editor
                   </p>
@@ -28,7 +42,7 @@ const TopNavbar = () => {
                 </div>
               )
             }
-            {userData && !roomData && (<div className='flex space-x-10'>
+            {!userData && !roomData && (<div className='flex space-x-10'>
               <Link to="/login" className="text-white">
                 Login
               </Link>
@@ -36,6 +50,11 @@ const TopNavbar = () => {
                 Sign up
               </Link>
             </div>)
+            }
+            {
+              userData && !roomData && (
+                <p className='text-white cursor-pointer' onClick={handleLogout}>LogOut</p>
+              )
             }
 
 
