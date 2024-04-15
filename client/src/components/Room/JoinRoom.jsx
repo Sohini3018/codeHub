@@ -14,7 +14,7 @@ const JoinRoom = () => {
     rooName: "",
     password: ""
   })
-  const { setRoomData, setEditorData, clearRoomStuff } = useRoomContext()
+  const { setRoomData, setEditorData, clearRoomStuff, boardData } = useRoomContext()
   const navigate = useNavigate()
 
   const fetchRooms = async () => {
@@ -40,7 +40,7 @@ const JoinRoom = () => {
     }
     let toastId
     try {
-      toastId = toast.loading(`${callType}ing room`)
+      toastId = toast.loading(`${callType === "create" ? "Creating room" : "Joining room"}`)
       const response = await fetch(`http://localhost:5000/api/room/${callType}`, {
         method: "POST",
         headers: {
@@ -96,7 +96,7 @@ const JoinRoom = () => {
           const boardData = await boardResponse.json()
           if (boardData.success) {
             console.log(boardData.data.data._id)
-            setBoardData((pre) => ({ ...pre, _id: boardData.data.data._id }))
+            boardData.current = { content: "", _id: boardData.data.data._id }
           }
 
           toast.success("Room created successfully", {
