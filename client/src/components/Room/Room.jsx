@@ -6,7 +6,7 @@ import ChatBox from '../Chatbox/ChatBox'
 import { useParams } from "react-router-dom"
 
 function Room() {
-    const { mode, setBoardData, setEditorData, setChatsData } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData } = useRoomContext()
     const { roomId } = useParams()
 
     const fetchData = async (roomId) => {
@@ -31,12 +31,12 @@ function Room() {
             if (boardReceived.data.statusCode === 200) {
                 console.log(boardReceived.data.value)
                 let data = boardReceived.data.value.content
-                let content
+                let content = ""
                 if (data) {
                     content = JSON.parse(data)
                 }
                 let _id = boardReceived.data.value._id
-                setBoardData({ content, _id })
+                boardData.current = { content, _id }
             }
             if (chatReceived.data.statusCode === 200) {
                 setChatsData(chatReceived.data.value)

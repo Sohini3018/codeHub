@@ -1,15 +1,17 @@
 import { Excalidraw } from "@excalidraw/excalidraw";
 import React, { useRef } from "react";
+import { useRoomContext } from "../../context/room/RoomContext.js"
 
 export const Whiteboard = () => {
   const excalidrawRef = useRef(null);
+  const { boardData } = useRoomContext()
 
   const extractExcalidrawContent = async () => {
     const excalidrawInstance = excalidrawRef.current;
     if (excalidrawInstance) {
-      const sceneElements =
-        excalidrawInstance.getSceneElementsIncludingDeleted();
-
+      const sceneElements = excalidrawInstance.getSceneElementsIncludingDeleted();
+      boardData.current = { content: sceneElements, _id: boardData.current._id }
+      console.log(sceneElements, boardData.current)
       try {
         const response = await fetch("http://localhost:5000/api/board/update", {
           method: "PATCH",
@@ -18,7 +20,7 @@ export const Whiteboard = () => {
           },
           body: JSON.stringify({
             content: JSON.stringify(sceneElements),
-            boardId: "6617b5647fbd67a09f4db403",
+            boardId: boardData.current._id,
           }),
         });
         if (response.ok) {
@@ -35,7 +37,7 @@ export const Whiteboard = () => {
 
   return (
     <div className="w-screen h-screen">
-      <Excalidraw ref={excalidrawRef} onChange={extractExcalidrawContent} />
+      <Excalidraw ref={excalidrawRef} onChange={extractExcalidrawContent} initialData={{ elements: boardData.current.content }} />
     </div>
   );
 };

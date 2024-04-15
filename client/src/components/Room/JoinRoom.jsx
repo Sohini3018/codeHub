@@ -14,7 +14,7 @@ const JoinRoom = () => {
     rooName: "",
     password: ""
   })
-  const { setRoomData, setBoardData, setEditorData, setChatsData, setMode } = useRoomContext()
+  const { setRoomData, setEditorData, clearRoomStuff } = useRoomContext()
   const navigate = useNavigate()
 
   const fetchRooms = async () => {
@@ -148,19 +148,7 @@ const JoinRoom = () => {
   }
 
   useEffect(() => {
-    setRoomData(null)
-    setChatsData([])
-    setEditorData({
-      _id: "",
-      html: "",
-      css: "",
-      js: ""
-    })
-    setBoardData({
-      _id: "",
-      content: ""
-    })
-    setMode("editor")
+    clearRoomStuff()
     fetchRooms()
   }, [])
 
