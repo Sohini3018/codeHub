@@ -131,7 +131,6 @@ const getRoomsWithUser = async (req, res) => {
                 }
             }
         }).select("-password")
-        console.log(roomsFound)
         if (roomsFound.length === 0) {
             return res.status(404).json({
                 success: false,

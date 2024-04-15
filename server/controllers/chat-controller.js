@@ -35,7 +35,6 @@ const createChat = async (req, res) => {
 
 const getChats = async (req, res) => {
     const { roomId } = req.params
-    console.log(roomId)
     try {
         const chats = await Chat.find({ roomId })
         if (chats.length === 0) {

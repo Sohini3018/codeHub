@@ -4,9 +4,10 @@ import { useRoomContext } from '../../context/room/RoomContext'
 import { Whiteboard } from '../WhiteBoard/Whiteboard'
 import ChatBox from '../Chatbox/ChatBox'
 import { useParams } from "react-router-dom"
+import { initSocket } from '../../utils/socket'
 
 function Room() {
-    const { mode, boardData, setEditorData, setChatsData } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData, socketRef } = useRoomContext()
     const { roomId } = useParams()
 
     const fetchData = async (roomId) => {
@@ -49,6 +50,9 @@ function Room() {
 
 
     useEffect(() => {
+        if (!socketRef.current) {
+            socketRef.current = initSocket()
+        }
         fetchData(roomId)
     }, [])
 

@@ -1,11 +1,22 @@
 const express = require("express");
 const cors = require("cors")
-const app = express();
 const router = require("./routes/auth-router");
 const roomRouter = require("./routes/room-routes")
 const codeRouter = require("./routes/code-routes.js")
 const boardRouter = require('./routes/board-routes.js')
 const chatRouter = require("./routes/chat-routes.js")
+const { Server } = require("socket.io")
+const { createServer } = require("node:http")
+const connectDB = require("./utils/db");
+
+
+const PORT = 5000;
+const app = express();
+const httpServer = createServer(app)
+const io = new Server(httpServer)
+
+// if DB connected then only start the server
+connectDB()
 
 app.use(express.json());
 app.use(cors())
@@ -17,14 +28,12 @@ app.use("/api/code", codeRouter)
 app.use("/api/board", boardRouter)
 app.use("/api/chat", chatRouter)
 
-const connectDB = require("./utils/db");
+const userSocketMap = {};
 
-const PORT = 5000;
+io.on("connection", (socket) => {
+  console.log("connected", socket.id)
+})
 
-// if DB connected then only start the server
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-  });
-});
+
+httpServer.listen(PORT, () => console.log(`application is running at: http://localhost:${PORT}`))
