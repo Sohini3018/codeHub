@@ -58,6 +58,11 @@ io.on("connection", (socket) => {
       });
     });
   })
+
+  socket.on(Actions.CHAT_SEND, ({ content, senderType }) => {
+    socket.broadcast.emit(Actions.CHAT_SEND, { content, senderType })
+  })
+
   socket.on('disconnecting', () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {

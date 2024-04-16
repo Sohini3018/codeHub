@@ -3,7 +3,7 @@ import Monaco from '../CodeEditor/Monaco'
 import { useRoomContext } from '../../context/room/RoomContext'
 import { Whiteboard } from '../WhiteBoard/Whiteboard'
 import ChatBox from '../Chatbox/ChatBox'
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { initSocket } from '../../utils/socket'
 import { Actions } from "../../utils/actions.js"
 import { useUserContext } from "../../context/user/UserContext.js"
@@ -14,6 +14,7 @@ function Room() {
     const { roomId } = useParams()
     const { userData } = useUserContext()
     console.log("localuser", userData.username)
+    const navigate = useNavigate()
 
     const fetchData = async (roomId) => {
         try {
@@ -55,11 +56,20 @@ function Room() {
 
 
     useEffect(() => {
-        fetchData(roomId)
         let socketio = initSocket()
         setSocketio(socketio)
         console.log("value", socketio)
+        socketio.on('connect_error', (err) => handleErrors(err));
+        socketio.on('connect_failed', (err) => handleErrors(err));
+
+        function handleErrors(e) {
+            console.log('socket error', e);
+            toast.error('Socket connection failed, try again later.');
+            navigate('/roomJoin');
+        }
+
         socketio?.emit(Actions.JOIN, { roomId, username: userData.username })
+        fetchData(roomId)
         socketio?.on(Actions.JOINED, ({
             clients,
             username,
@@ -70,8 +80,12 @@ function Room() {
                 toast.success(`${username} joined`)
             }
         })
+        socketio.on(Actions.DISCONNECTED, ({ socketId, username }) => {
+            console.log("hello", username)
+            toast.error(`${username} left`)
+        })
         return () => {
-            socketio?.disconnect()
+            socketio?.disconnect();
         };
     }, [])
 

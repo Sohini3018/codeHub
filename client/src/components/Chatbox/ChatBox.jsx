@@ -1,15 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { sendMsgToOpenAI } from './openai';
 import MessageTemplate from './MessageTemplate';
 import { useParams } from "react-router-dom"
 import { useRoomContext } from "../../context/room/RoomContext.js"
+import { Actions } from '../../utils/actions.js';
 
 const ChatBox = () => {
   const [userInput, setUserInput] = useState('');
   // const [messages, setMessages] = useState([]);
   const chatRef = useRef(null)
   const { roomId } = useParams()
-  const { chatsData: messages, setChatsData: setMessages } = useRoomContext()
+  const { chatsData: messages, setChatsData: setMessages, socketio } = useRoomContext()
 
   async function getResponse(userInput) {
     try {
@@ -56,6 +57,9 @@ const ChatBox = () => {
       ...prevMessages,
       { content: userInput, senderType: 'USER' },
     ]);
+    // 
+    socketio?.emit(Actions.CHAT_SEND, { content: userInput, senderType: "USER" })
+
     saveMessages("USER", userInput)
 
     // const responseFromGPT = await sendMsgToOpenAI(userInput);
@@ -67,12 +71,26 @@ const ChatBox = () => {
       { content: responseFromModel[0].generated_text, senderType: 'BOT' },
     ]);
     saveMessages("BOT", responseFromModel[0].generated_text)
+    socketio?.emit(Actions.CHAT_SEND, { content: responseFromModel[0].generated_text, senderType: "BOT" })
 
     setTimeout(() => {
       chatRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
     }, 0);
     setUserInput('');
   };
+
+  useEffect(() => {
+    if (socketio) {
+      socketio?.on(Actions.CHAT_SEND, ({ content, senderType }) => {
+        console.log({ content, senderType })
+        setMessages((pre) => [...pre, { content, senderType }])
+      })
+    }
+
+    return () => {
+      socketio?.off(Actions.CHAT_SEND)
+    }
+  }, [])
 
 
   return (
