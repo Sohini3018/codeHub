@@ -16,7 +16,7 @@ function RoomContextProvider({ children }) {
     const [chatsData, setChatsData] = useState([])
     const [roomData, setRoomData] = useState(null)
     const [mode, setMode] = useState("editor")
-    const socketRef = useRef(null)
+    const [socketio, setSocketio] = useState(null)
 
     function clearRoomStuff() {
         setRoomData(null)
@@ -35,7 +35,7 @@ function RoomContextProvider({ children }) {
     }
 
     return (
-        <RoomContext.Provider value={{ editorData, boardData, chatsData, setEditorData, setChatsData, roomData, setRoomData, mode, setMode, clearRoomStuff, socketRef }}>
+        <RoomContext.Provider value={{ editorData, boardData, chatsData, setEditorData, setChatsData, roomData, setRoomData, mode, setMode, clearRoomStuff, socketio, setSocketio }}>
             {children}
         </RoomContext.Provider>
     )

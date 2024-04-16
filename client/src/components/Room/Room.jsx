@@ -1,14 +1,19 @@
-import React, { useDebugValue, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Monaco from '../CodeEditor/Monaco'
 import { useRoomContext } from '../../context/room/RoomContext'
 import { Whiteboard } from '../WhiteBoard/Whiteboard'
 import ChatBox from '../Chatbox/ChatBox'
 import { useParams } from "react-router-dom"
 import { initSocket } from '../../utils/socket'
+import { Actions } from "../../utils/actions.js"
+import { useUserContext } from "../../context/user/UserContext.js"
+import { toast } from "react-hot-toast"
 
 function Room() {
-    const { mode, boardData, setEditorData, setChatsData, socketRef } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData, setSocketio } = useRoomContext()
     const { roomId } = useParams()
+    const { userData } = useUserContext()
+    console.log("localuser", userData.username)
 
     const fetchData = async (roomId) => {
         try {
@@ -50,10 +55,24 @@ function Room() {
 
 
     useEffect(() => {
-        if (!socketRef.current) {
-            socketRef.current = initSocket()
-        }
         fetchData(roomId)
+        let socketio = initSocket()
+        setSocketio(socketio)
+        console.log("value", socketio)
+        socketio?.emit(Actions.JOIN, { roomId, username: userData.username })
+        socketio?.on(Actions.JOINED, ({
+            clients,
+            username,
+            socketId
+        }) => {
+            if (userData.username !== username) {
+                console.log("username", username)
+                toast.success(`${username} joined`)
+            }
+        })
+        return () => {
+            socketio?.disconnect()
+        };
     }, [])
 
     return (

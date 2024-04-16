@@ -8,6 +8,7 @@ const chatRouter = require("./routes/chat-routes.js")
 const { Server } = require("socket.io")
 const { createServer } = require("node:http")
 const connectDB = require("./utils/db");
+const { Actions } = require("./utils/actions.js");
 
 
 const PORT = 5000;
@@ -29,9 +30,45 @@ app.use("/api/board", boardRouter)
 app.use("/api/chat", chatRouter)
 
 const userSocketMap = {};
+function getAllConnectedClients(roomId) {
+  // io.sockets.adapter.rooms.get(roomId) will return Map and here we are converting it to array 
+  return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
+    (socketId) => {
+      return {
+        socketId,
+        username: userSocketMap[socketId],
+      };
+    }
+  );
+}
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id)
+  socket.on(Actions.JOIN, ({ roomId, username }) => {
+    console.log(roomId, username)
+    userSocketMap[socket.id] = username;
+    socket.join(roomId);
+    const clients = getAllConnectedClients(roomId);
+    console.log({ clients });
+    clients.forEach(({ socketId }) => {
+      io.to(socketId).emit(Actions.JOINED, {
+        clients,
+        username,
+        socketId: socket.id,
+      });
+    });
+  })
+  socket.on('disconnecting', () => {
+    const rooms = [...socket.rooms];
+    rooms.forEach((roomId) => {
+      socket.in(roomId).emit(Actions.DISCONNECTED, {
+        socketId: socket.id,
+        username: userSocketMap[socket.id],
+      });
+    });
+    delete userSocketMap[socket.id];
+    socket.leave();
+  });
 })
 
 
