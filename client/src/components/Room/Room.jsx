@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Monaco from '../CodeEditor/Monaco'
 import { useRoomContext } from '../../context/room/RoomContext'
 import { Whiteboard } from '../WhiteBoard/Whiteboard'
@@ -14,6 +14,7 @@ function Room() {
     const { roomId } = useParams()
     const { userData } = useUserContext()
     console.log("localuser", userData.username)
+
     const navigate = useNavigate()
 
     const fetchData = async (roomId) => {

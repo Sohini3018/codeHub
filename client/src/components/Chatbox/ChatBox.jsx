@@ -84,6 +84,9 @@ const ChatBox = () => {
       socketio?.on(Actions.CHAT_SEND, ({ content, senderType }) => {
         console.log({ content, senderType })
         setMessages((pre) => [...pre, { content, senderType }])
+        setTimeout(() => {
+          chatRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+        }, 0);
       })
     }
 
