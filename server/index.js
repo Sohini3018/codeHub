@@ -64,7 +64,6 @@ io.on("connection", (socket) => {
   })
 
   socket.on(Actions.BOARD_CHANGE, ({ boardData }) => {
-    console.log("got", boardData)
     socket.broadcast.emit(Actions.BOARD_CHANGE, { boardData })
   })
 

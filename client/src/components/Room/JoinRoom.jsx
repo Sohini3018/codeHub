@@ -62,7 +62,6 @@ const JoinRoom = () => {
       console.log(data)
       if (data.success) {
         if (data.data.statusCode === 201) {
-          console.log(data.data.value)
           setRoomData(data.data.value)
           const codeResponse = await fetch("http://localhost:5000/api/code/create", {
             method: "POST",
@@ -105,7 +104,8 @@ const JoinRoom = () => {
 
           return navigate(`/room/${data.data.value._id}`)
         } else if (data.data.statusCode === 200) {
-          fetchData(data.data.value._id)
+          // fetchData(data.data.value._id)
+          setRoomData(data.data.value)
           toast.success("Joined room", {
             id: toastId
           })

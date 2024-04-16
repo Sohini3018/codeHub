@@ -10,11 +10,10 @@ import { useUserContext } from "../../context/user/UserContext.js"
 import { toast } from "react-hot-toast"
 
 function Room() {
-    const { mode, boardData, setEditorData, setChatsData, setSocketio } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData } = useRoomContext()
     const { roomId } = useParams()
     const { userData } = useUserContext()
     console.log("localuser", userData.username)
-
     const navigate = useNavigate()
 
     const fetchData = async (roomId) => {
@@ -71,6 +70,7 @@ function Room() {
 
         socketio?.emit(Actions.JOIN, { roomId, username: userData.username })
         fetchData(roomId)
+        setPermission(roomData?.admin)
         socketio?.on(Actions.JOINED, ({
             clients,
             username,
