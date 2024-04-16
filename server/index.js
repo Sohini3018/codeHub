@@ -63,6 +63,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit(Actions.CHAT_SEND, { content, senderType })
   })
 
+  socket.on(Actions.BOARD_CHANGE, ({ boardData }) => {
+    console.log("got", boardData)
+    socket.broadcast.emit(Actions.BOARD_CHANGE, { boardData })
+  })
+
   socket.on('disconnecting', () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {

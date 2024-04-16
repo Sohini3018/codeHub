@@ -80,6 +80,9 @@ const ChatBox = () => {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      chatRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
     if (socketio) {
       socketio?.on(Actions.CHAT_SEND, ({ content, senderType }) => {
         console.log({ content, senderType })
