@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { sendMsgToOpenAI } from './openai';
+// import { sendMsgToOpenAI } from './openai';
 import MessageTemplate from './MessageTemplate';
 import { useParams } from "react-router-dom"
 import { useRoomContext } from "../../context/room/RoomContext.js"

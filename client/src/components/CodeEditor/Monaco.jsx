@@ -1,16 +1,18 @@
-import React, { useRef, useState } from "react";
+// Client side code
+
+import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import { useRoomContext } from "../../context/room/RoomContext.js"
+import { useRoomContext } from "../../context/room/RoomContext.js";
 
 const Monaco = () => {
   const [fileName, setFileName] = useState("script.js");
-  const editorRef = useRef(null)
+  const editorRef = useRef(null);
   const [code, setCode] = useState({
     js: "// Write JS code here...",
     css: "/* Write CSS code here... */",
     html: "<!-- Write HTML code here... -->",
-  })
-  const { setEditorData, editorData, roomData } = useRoomContext()
+  });
+  const { setEditorData, editorData, roomData } = useRoomContext();
 
   let src = ` <!DOCTYPE html>
   <html lang="en">
@@ -24,7 +26,7 @@ const Monaco = () => {
         </body>
         <style>${editorData?.css}</style>
         <script>${editorData?.js}</script>
-        </html>`
+        </html>`;
 
   const files = {
     "script.js": {
@@ -48,18 +50,77 @@ const Monaco = () => {
 
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
-  }
+  };
+
+  useEffect(() => {
+    // Fetch code data from the server when the component mounts
+    fetchCodeData();
+  }, []);
+
+  const fetchCodeData = async () => {
+    try {
+      const roomId = window.location.pathname.split("/").pop(); // Extract room ID from the URL
+      const response = await fetch(`/api/code/get/${roomId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setEditorData(data.value);
+      } else {
+        throw new Error(`Error fetching code data: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const saveCode = async (updatedData) => {
+    console.log("Updated Data:", updatedData);
+    try {
+      let response;
+      if (updatedData && updatedData._id) {
+        // If code exists, update it
+        response = await fetch("http://localhost:5000/api/code/update", {
+          method: "PATCH",
+          mode: 'cors',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        });
+      } else {
+        // If code doesn't exist, create it
+        response = await fetch("http://localhost:5000/api/code/create", {
+          method: "POST",
+          mode: 'cors',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        });
+      }
+      if (!response.ok) {
+        throw new Error(`Error saving code: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = () => {
+    // Update local state when the code changes
+    const updatedData = { ...editorData };
+
     if (fileName === "index.html") {
-      setEditorData({ ...editorData, html: editorRef.current.getValue() })
+      updatedData.html = editorRef.current.getValue();
     } else if (fileName === "style.css") {
-      setEditorData({ ...editorData, css: editorRef.current.getValue() })
+      updatedData.css = editorRef.current.getValue();
     } else {
-      setEditorData({ ...editorData, js: editorRef.current.getValue() })
+      updatedData.js = editorRef.current.getValue();
     }
-    console.log(code);
-  }
+
+    // Save the code to the server
+    saveCode(updatedData);
+    setEditorData(updatedData);
+  };
 
   return (
     <div className="flex h-screen">

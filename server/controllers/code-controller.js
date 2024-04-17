@@ -54,28 +54,28 @@ const createCode = async (req, res) => {
 }
 
 const updateCode = async (req, res) => {
-    const { html, css, js, codeId } = req.body
-    if (!Types.ObjectId.isValid(codeId)) {
+    const { html, css, js, _id } = req.body
+    if (!Types.ObjectId.isValid(_id)) {
         return res.status(400).json({
             success: false,
             data: {
                 statusCode: 400,
-                message: "please provide correct codeId"
+                message: "please provide correct _id"
             }
         })
     }
     try {
-        const codeFound = await Code.findById(codeId)
+        const codeFound = await Code.findById(_id)
         if (!codeFound) {
             return res.status(404).json({
                 success: false,
                 data: {
                     statusCode: 404,
-                    message: "Code with this codeId does not exists"
+                    message: "Code with this _id does not exists"
                 }
             })
         }
-        const updatedCode = await Code.findByIdAndUpdate(codeId, { html, css, js }, { new: true })
+        const updatedCode = await Code.findByIdAndUpdate(_id, { html, css, js }, { new: true })
         return res.status(200).json({
             success: true,
             data: {
