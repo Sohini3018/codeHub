@@ -3,6 +3,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { useRoomContext } from "../../context/room/RoomContext.js";
+import {Actions} from "../../utils/actions.js"
+import { useUserContext } from "../../context/user/UserContext.js";
 
 const Monaco = () => {
   const [fileName, setFileName] = useState("script.js");
@@ -12,7 +14,8 @@ const Monaco = () => {
     css: "/* Write CSS code here... */",
     html: "<!-- Write HTML code here... -->",
   });
-  const { setEditorData, editorData, roomData } = useRoomContext();
+  const { setEditorData, editorData, roomData, socketio, permission } = useRoomContext();
+  const {userData} = useUserContext()
 
   let src = ` <!DOCTYPE html>
   <html lang="en">
@@ -55,7 +58,17 @@ const Monaco = () => {
   useEffect(() => {
     // Fetch code data from the server when the component mounts
     fetchCodeData();
-  }, []);
+    socketio?.on(Actions.CODE_CHANGE,({updatedData})=>{
+      console.log("permission",permission,roomData.admin)
+      if(permission !== userData.username){
+        console.log("got data",editorData[fileName.split(".")[1]], fileName)
+        setEditorData(updatedData)
+      }
+    })
+    return ()=>{
+      socketio?.off(Actions.CODE_CHANGE)
+    }
+  }, [editorData]);
 
   const fetchCodeData = async () => {
     try {
@@ -118,8 +131,11 @@ const Monaco = () => {
     }
 
     // Save the code to the server
-    saveCode(updatedData);
     setEditorData(updatedData);
+    if(permission === userData.username){
+      saveCode(updatedData);
+      socketio.emit(Actions.CODE_CHANGE,{updatedData})
+    }
   };
 
   return (
@@ -155,6 +171,7 @@ const Monaco = () => {
           defaultValue={file.value}
           onMount={handleEditorDidMount}
           onChange={handleChange}
+          value={editorData[fileName.split(".")[1]]}
         />
       </div>
       <div className="w-1/2 mt-4">

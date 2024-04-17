@@ -67,6 +67,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit(Actions.BOARD_CHANGE, { boardData })
   })
 
+  socket.on(Actions.CODE_CHANGE,({updatedData})=>{
+    console.log("got data", updatedData);
+    socket.broadcast.emit(Actions.CODE_CHANGE, { updatedData });
+  })
+
   socket.on('disconnecting', () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {

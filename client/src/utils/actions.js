@@ -3,7 +3,8 @@ const Actions = {
     JOINED: "JOINED",
     DISCONNECTED: "DISCONNECTED",
     CHAT_SEND: "CHAT_SEND",
-    BOARD_CHANGE: "BOARD_CHANGE"
+    BOARD_CHANGE: "BOARD_CHANGE",
+    CODE_CHANGE: "CODE_CHANGE",
 }
 
 export { Actions }

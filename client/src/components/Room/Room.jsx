@@ -13,7 +13,6 @@ function Room() {
     const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData } = useRoomContext()
     const { roomId } = useParams()
     const { userData } = useUserContext()
-    console.log("localuser", userData.username)
     const navigate = useNavigate()
 
     const fetchData = async (roomId) => {
