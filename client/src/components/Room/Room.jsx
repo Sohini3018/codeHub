@@ -10,10 +10,12 @@ import { useUserContext } from "../../context/user/UserContext.js"
 import { toast } from "react-hot-toast"
 
 function Room() {
-    const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData, setClients, clients } = useRoomContext()
     const { roomId } = useParams()
     const { userData } = useUserContext()
     const navigate = useNavigate()
+
+    console.log("clients", clients)
 
     const fetchData = async (roomId) => {
         try {
@@ -78,6 +80,7 @@ function Room() {
             if (userData.username !== username) {
                 console.log("username", username)
                 toast.success(`${username} joined`)
+                setClients(clients)
             }
         })
         socketio.on(Actions.DISCONNECTED, ({ socketId, username }) => {
@@ -109,8 +112,16 @@ function Room() {
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu p-4 w-80 min-h-full h-screen bg-base-200 text-base-content z-50">
                         {/* Sidebar content here */}
-                        <li><a>Sidebar Item 1</a></li>
-                        <li><a>Sidebar Item 2</a></li>
+                        {
+
+                            clients && clients.map((el) => (
+                                <div key={el.socketId} className="avatar placeholder cursor-pointer mb-2">
+                                    <div className="bg-neutral text-neutral-content rounded-full w-16">
+                                        <span className="text-xl">{el.username}</span>
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </ul>
                 </div>
             </div>
