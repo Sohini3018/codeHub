@@ -15,7 +15,6 @@ function Room() {
     const { userData } = useUserContext()
     const navigate = useNavigate()
 
-    console.log("clients", clients)
 
     const fetchData = async (roomId) => {
         try {
@@ -57,6 +56,11 @@ function Room() {
 
 
     useEffect(() => {
+
+        if (clients.length === 0) {
+            setClients([userData.username])
+        }
+
         let socketio = initSocket()
         setSocketio(socketio)
         console.log("value", socketio)
@@ -78,10 +82,12 @@ function Room() {
             socketId
         }) => {
             if (userData.username !== username) {
-                console.log("username", username)
                 toast.success(`${username} joined`)
-                setClients(clients)
+                // setClients(pre => [...pre, username])
+                console.log("clients", clients)
             }
+            console.log("got joined request", userData.username)
+            setClients(clients)
         })
         socketio.on(Actions.DISCONNECTED, ({ socketId, username }) => {
             console.log("hello", username)
@@ -114,7 +120,7 @@ function Room() {
                         {/* Sidebar content here */}
                         {
 
-                            clients && clients.map((el) => (
+                            clients.length > 0 && clients.map((el) => (
                                 <div key={el.socketId} className="avatar placeholder cursor-pointer mb-2">
                                     <div className="bg-neutral text-neutral-content rounded-full w-16">
                                         <span className="text-xl">{el.username}</span>

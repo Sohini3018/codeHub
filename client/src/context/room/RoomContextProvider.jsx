@@ -18,7 +18,7 @@ function RoomContextProvider({ children }) {
     const [mode, setMode] = useState("editor")
     const [socketio, setSocketio] = useState(null)
     const [permission, setPermission] = useState(null)
-    const [clients, setClients] = useState(null)
+    const [clients, setClients] = useState([])
 
     function clearRoomStuff() {
         setRoomData(null)
@@ -34,6 +34,7 @@ function RoomContextProvider({ children }) {
             content: ""
         }
         setMode("editor")
+        setClients([])
     }
 
     return (
