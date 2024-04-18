@@ -5,6 +5,7 @@ const Actions = {
     CHAT_SEND: "CHAT_SEND",
     BOARD_CHANGE: "BOARD_CHANGE",
     CODE_CHANGE: "CODE_CHANGE",
+    PERMISSION_CHANGE: "PERMISSION_CHANGE"
 }
 
 export { Actions }

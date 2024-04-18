@@ -10,7 +10,7 @@ import { useUserContext } from "../../context/user/UserContext.js"
 import { toast } from "react-hot-toast"
 
 function Room() {
-    const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData, setClients, clients } = useRoomContext()
+    const { mode, boardData, setEditorData, setChatsData, setSocketio, setPermission, roomData, setClients, clients, socketio, permission } = useRoomContext()
     const { roomId } = useParams()
     const { userData } = useUserContext()
     const navigate = useNavigate()
@@ -54,6 +54,13 @@ function Room() {
         }
     };
 
+    const sendPermission = (username) => {
+        if (permission === userData.username) {
+            setPermission(username)
+            socketio.emit(Actions.PERMISSION_CHANGE, { username })
+        }
+    }
+
 
     useEffect(() => {
 
@@ -93,6 +100,12 @@ function Room() {
             console.log("hello", username)
             toast.error(`${username} left`)
         })
+
+        socketio.on(Actions.PERMISSION_CHANGE, ({ username }) => {
+            console.log("permission changes", username)
+            setPermission(username)
+        })
+
         return () => {
             socketio?.disconnect();
         };
@@ -121,8 +134,8 @@ function Room() {
                         {
 
                             clients.length > 0 && clients.map((el) => (
-                                <div key={el.socketId} className="avatar placeholder cursor-pointer mb-2">
-                                    <div className="bg-neutral text-neutral-content rounded-full w-16">
+                                <div key={el.socketId} className="avatar placeholder cursor-pointer mb-2 ">
+                                    <div className="bg-neutral text-neutral-content rounded-full w-16" onClick={() => sendPermission(el.username)}>
                                         <span className="text-xl">{el.username}</span>
                                     </div>
                                 </div>
