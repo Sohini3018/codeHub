@@ -8,6 +8,7 @@ import { useUserContext } from "../../context/user/UserContext.js";
 
 const Monaco = () => {
   const [fileName, setFileName] = useState("script.js");
+  const [readMode, setReadMode] = useState(false)
   const editorRef = useRef(null);
   const [code, setCode] = useState({
     js: "// Write JS code here...",
@@ -16,6 +17,13 @@ const Monaco = () => {
   });
   const { setEditorData, editorData, roomData, socketio, permission } = useRoomContext();
   const { userData } = useUserContext()
+
+  const readModeSetter = () => {
+    if (userData.username !== permission) {
+      return setReadMode(true)
+    }
+    return setReadMode(false)
+  }
 
   let src = ` <!DOCTYPE html>
   <html lang="en">
@@ -56,6 +64,7 @@ const Monaco = () => {
   };
 
   useEffect(() => {
+    readModeSetter()
     // Fetch code data from the server when the component mounts
     fetchCodeData();
     socketio?.on(Actions.CODE_CHANGE, ({ updatedData }) => {
@@ -68,7 +77,7 @@ const Monaco = () => {
     return () => {
       socketio?.off(Actions.CODE_CHANGE)
     }
-  }, [editorData]);
+  }, [editorData, permission]);
 
   const fetchCodeData = async () => {
     try {
@@ -172,6 +181,11 @@ const Monaco = () => {
           onMount={handleEditorDidMount}
           onChange={handleChange}
           value={editorData[fileName.split(".")[1]]}
+          options={
+            {
+              readOnly: readMode
+            }
+          }
         />
       </div>
       <div className="w-1/2 mt-4">
