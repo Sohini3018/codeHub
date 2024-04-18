@@ -9,6 +9,7 @@ export const Whiteboard = () => {
   const { boardData, socketio, permission } = useRoomContext()
   const { userData } = useUserContext()
   const [excalidrawApi, setExcalidrawApi] = useState(null)
+  const [viewMode, setViewMode] = useState(false)
 
   const extractExcalidrawContent = async () => {
     const sceneElements = excalidrawApi?.getSceneElements()
@@ -41,7 +42,17 @@ export const Whiteboard = () => {
     }
   };
 
+  const viewModeSetter = () => {
+    console.log("viemodsetter", userData.username, permission)
+    if (userData.username !== permission) {
+      return setViewMode(true)
+    } else {
+      return setViewMode(false)
+    }
+  }
+
   useEffect(() => {
+    viewModeSetter()
     if (!excalidrawApi) {
       return
     }
@@ -52,11 +63,16 @@ export const Whiteboard = () => {
         }
       })
     })
-  }, [excalidrawApi])
+  }, [excalidrawApi, permission])
 
   return (
     <div className="w-full h-screen z-10">
-      <Excalidraw ref={api => setExcalidrawApi(api)} onChange={extractExcalidrawContent} initialData={{ elements: boardData.current.content }} />
+      <Excalidraw
+        ref={api => setExcalidrawApi(api)}
+        onChange={extractExcalidrawContent}
+        initialData={{ elements: boardData.current.content }}
+        viewModeEnabled={viewMode}
+      />
     </div>
   );
 };
