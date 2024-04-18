@@ -55,7 +55,7 @@ export const Whiteboard = () => {
   }, [excalidrawApi])
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-full h-screen z-10">
       <Excalidraw ref={api => setExcalidrawApi(api)} onChange={extractExcalidrawContent} initialData={{ elements: boardData.current.content }} />
     </div>
   );

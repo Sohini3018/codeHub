@@ -91,15 +91,29 @@ function Room() {
 
     return (
         <div>
-            {
-                mode === "editor" && <Monaco />
-            }
-            {
-                mode === "board" && <Whiteboard />
-            }
-            {
-                mode === "chat" && <ChatBox />
-            }
+            <div className="drawer">
+                <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+                <div className="drawer-content">
+                    {/* Page content here */}
+                    {
+                        mode === "editor" && <Monaco />
+                    }
+                    {
+                        mode === "board" && <Whiteboard />
+                    }
+                    {
+                        mode === "chat" && <ChatBox />
+                    }
+                </div>
+                <div className="drawer-side z-50">
+                    <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+                    <ul className="menu p-4 w-80 min-h-full h-screen bg-base-200 text-base-content z-50">
+                        {/* Sidebar content here */}
+                        <li><a>Sidebar Item 1</a></li>
+                        <li><a>Sidebar Item 2</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     )
 }

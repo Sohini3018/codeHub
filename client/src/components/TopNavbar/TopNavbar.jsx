@@ -19,7 +19,7 @@ const TopNavbar = () => {
 
   return (
     <div>
-      <nav className="bg-gray-800 p-4">
+      <nav className="bg-gray-800 p-4 h-16">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-white text-2xl font-bold">CodeHub</Link>
           <div className="flex space-x-10">
@@ -39,6 +39,7 @@ const TopNavbar = () => {
                   <p to="/whiteboard" className="text-white cursor-pointer" onClick={() => setMode("board")}>
                     Whiteboard
                   </p>
+                  <label htmlFor="my-drawer" className="text-white cursor-pointer drawer-button">Users</label>
                 </div>
               )
             }
