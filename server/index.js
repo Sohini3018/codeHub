@@ -79,9 +79,11 @@ io.on("connection", (socket) => {
   socket.on('disconnecting', () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {
+      const clients = getAllConnectedClients(roomId)
       socket.in(roomId).emit(Actions.DISCONNECTED, {
         socketId: socket.id,
         username: userSocketMap[socket.id],
+        clients
       });
     });
     delete userSocketMap[socket.id];

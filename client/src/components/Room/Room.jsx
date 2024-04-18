@@ -96,9 +96,12 @@ function Room() {
             console.log("got joined request", userData.username)
             setClients(clients)
         })
-        socketio.on(Actions.DISCONNECTED, ({ socketId, username }) => {
-            console.log("hello", username)
+        socketio.on(Actions.DISCONNECTED, ({ socketId, username, clients }) => {
+            console.log("hello", username, clients)
             toast.error(`${username} left`)
+            const filteredClient = clients.filter((el) => el.username !== username)
+            console.log("filteredClient", filteredClient)
+            setClients(filteredClient)
         })
 
         socketio.on(Actions.PERMISSION_CHANGE, ({ username }) => {
