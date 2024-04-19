@@ -19,7 +19,7 @@ const JoinRoom = () => {
 
   const fetchRooms = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/room/get?username=${userData.username}`)
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/room/get?username=${userData.username}`)
       const data = await response.json()
       console.log(data)
       if (data.success) {
@@ -41,7 +41,7 @@ const JoinRoom = () => {
     let toastId
     try {
       toastId = toast.loading(`${callType === "create" ? "Creating room" : "Joining room"}`)
-      const response = await fetch(`http://localhost:5000/api/room/${callType}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/room/${callType}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -63,7 +63,7 @@ const JoinRoom = () => {
       if (data.success) {
         if (data.data.statusCode === 201) {
           setRoomData(data.data.value)
-          const codeResponse = await fetch("http://localhost:5000/api/code/create", {
+          const codeResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/code/create`, {
             method: "POST",
             mode: "cors",
             headers: {
@@ -81,7 +81,7 @@ const JoinRoom = () => {
             console.log(codeData.data.value._id)
             setEditorData((pre) => ({ ...pre, _id: codeData.data.value._id }))
           }
-          const boardResponse = await fetch("http://localhost:5000/api/board/create", {
+          const boardResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/board/create`, {
             method: "POST",
             mode: "cors",
             headers: {

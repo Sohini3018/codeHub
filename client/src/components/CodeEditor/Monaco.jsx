@@ -100,7 +100,7 @@ const Monaco = () => {
       let response;
       if (updatedData && updatedData._id) {
         // If code exists, update it
-        response = await fetch("http://localhost:5000/api/code/update", {
+        response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/code/update`, {
           method: "PATCH",
           mode: 'cors',
           headers: {
@@ -110,7 +110,7 @@ const Monaco = () => {
         });
       } else {
         // If code doesn't exist, create it
-        response = await fetch("http://localhost:5000/api/code/create", {
+        response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/code/create`, {
           method: "POST",
           mode: 'cors',
           headers: {

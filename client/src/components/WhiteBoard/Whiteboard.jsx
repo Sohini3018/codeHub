@@ -21,7 +21,7 @@ export const Whiteboard = () => {
       socketio.emit(Actions.BOARD_CHANGE, { boardData: sceneElements })
     }
     try {
-      const response = await fetch("http://localhost:5000/api/board/update", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/board/update`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

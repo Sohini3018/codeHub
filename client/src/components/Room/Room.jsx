@@ -19,9 +19,9 @@ function Room() {
     const fetchData = async (roomId) => {
         try {
             const [codeResonse, boardResponse, chatResponse] = await Promise.all([
-                fetch(`http://localhost:5000/api/code/get/${roomId}`),
-                fetch(`http://localhost:5000/api/board/get/${roomId}`),
-                fetch(`http://localhost:5000/api/chat/get/${roomId}`),
+                fetch(`${import.meta.env.VITE_BACKEND_URL}/api/code/get/${roomId}`),
+                fetch(`${import.meta.env.VITE_BACKEND_URL}/api/board/get/${roomId}`),
+                fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat/get/${roomId}`),
             ]);
 
             const codeReceived = await codeResonse.json();

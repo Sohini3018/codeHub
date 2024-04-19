@@ -31,7 +31,7 @@ const ChatBox = () => {
 
   const saveMessages = async (senderType, content) => {
     try {
-      const response = await fetch("http://localhost:5000/api/chat/create", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat/create`, {
         method: "POST",
         mode: 'cors',
         headers: {
