@@ -7,7 +7,7 @@ const initSocket = () => {
         timeout: 10000,
         transports: ['websocket'],
     };
-    return io("http://localhost:5000", options)
+    return io(`${import.meta.env.VITE_BACKEND_URL}`, options);
 }
 
 export { initSocket }
