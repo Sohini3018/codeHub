@@ -5,36 +5,40 @@ import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useUserContext } from "../../context/user/UserContext";
+import {useForm} from "react-hook-form"
+import {z} from "zod"
+import {zodResolver} from "@hookform/resolvers/zod"
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
   const navigate = useNavigate()
   const { setItem } = useLocalStorage()
   const { setUserData } = useUserContext()
 
-  function changeHandler(event) {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: value,
-      };
-    });
-  }
+  const loginSchema = z.object({
+    email:z.string({
+      invalid_type_error:"Invalid email is provided",
+      required_error:"Email is required"
+    }).email(),
+    password: z.string({
+      required_error:"Password is required",
+      invalid_type_error:"Password must be of atleast 8 characters"
+    }).min(8)
+  })
+  const {register,handleSubmit,formState:{errors}} = useForm({
+    resolver: zodResolver(loginSchema)
+  })
 
-  async function submitHandler(event) {
-    event.preventDefault();
+  async function submitHandler(data) {
+    console.log(data)
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         console.log("Form submitted successfully");
@@ -44,7 +48,6 @@ const Login = () => {
         console.log(data.data)
         navigate("/roomJoin")
         toast.success("Logged in");
-        setFormData({ email: "", password: "" });
       } else {
         toast.error("Form submission failed");
         console.error("Form submission failed");
@@ -62,20 +65,20 @@ const Login = () => {
           Welcome to CodeHub!
         </h1>
 
-        <form onSubmit={submitHandler} className="flex flex-col gap-y-4">
+        <form onSubmit={handleSubmit(submitHandler)} className="flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-1">
             <label htmlFor="email" className="font-medium">
               Email
             </label>
             <input
-              type="text"
+              type="email"
               id="email"
               className="rounded-full pl-3 py-2 focus:outline-double"
               placeholder="Enter your email"
               name="email"
-              onChange={changeHandler}
-              value={formData.email}
+              {...register("email")}
             />
+            {errors.email && <div className="text-red-500">{errors.email.message}</div>}
           </div>
           <div className="flex flex-col gap-y-1 relative">
             <label htmlFor="password" className="font-medium">
@@ -87,9 +90,10 @@ const Login = () => {
               className="rounded-full pl-3 py-2 focus:outline-double"
               placeholder="Enter your password"
               name="password"
-              onChange={changeHandler}
-              value={formData.password}
+               {...register("password")}
             />
+            {errors.password && <div className="text-red-500">{errors.password.message}</div>}
+
             <span
               onClick={() => {
                 setShowPassword((prev) => {
